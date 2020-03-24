@@ -29,8 +29,10 @@ foreach($req_data as $key=>$row) {
     echo "</tr>";
 }
 echo "</table>";
-
     
+ $sql = "UPDATE tokens set active='4' where refid='{$ptoken}'";
+           $result = $conn->query($sql);
+    echo "Patient Forwarded to Pharmacy! ";
     
     
 }else{

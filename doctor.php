@@ -1,4 +1,8 @@
 <?php
+session_start();
+if(!isset($_SESSION['dnid'])){
+    echo "<script> window.location.href = \"doclogin.php\";</script>";
+}
 include('dbcon.php');
 ?>
 
@@ -18,8 +22,72 @@ include('dbcon.php');
     
   <center><h2>- Doctor's Patient Management -</h2></center>
  <br><br>
+    
     <div class="row">
-    <div class="col-sm-6">
+        <div  class="col-sm-3">
+            
+        </div>
+        <div class="col-sm-6"></div>
+        <div class="col-sm-2">
+        
+            <?php 
+            echo "<h4>Hello, <br>Dr. {$_SESSION['user']['fname']} {$_SESSION['user']['lname']} </h4>";     
+            ?>
+             <a href="dlogout.php"><button class="btn-danger">Logout</button></a>
+        </div>
+        <div class="col-sm-1">
+       
+        </div>
+    
+        
+    </div>
+    
+    
+    <div class="row">
+        
+        <div class="col-sm-1">
+            <form action="" method="post">
+<h4>Screened Patient Tokens</h4>
+            <?php
+         $sql = "SELECT * from tokens where active ='2'";
+    
+    $result = $conn->query($sql);
+    while($row = $result->fetch_assoc()){
+        echo "<h4>".$row['refid']."<input type=\"radio\" name=\"doctoken\" value=\"{$row['refid']}\"> </h4>";
+
+    }
+                if(isset($_POST['doctoken'])){
+                    
+                    $sql = "UPDATE tokens set active='3' where refid='{$_POST['doctoken']}'";
+                     $result = $conn->query($sql);
+                    echo "Patient Token Updated !!<br>";
+                }
+                
+    ?><input class="btn-info" type="submit" name="call_token" value="Call">
+            </form>    
+        </div>
+        <div class="col-sm-1">
+            <form action="" method="post">
+<h4>Active Patient Tokens</h4>
+            <?php
+         $sql = "SELECT * from tokens where active ='3'";
+    
+    $result = $conn->query($sql);
+    while($row = $result->fetch_assoc()){
+        echo "<h4>".$row['refid']."<input type=\"radio\" name=\"forwardtoken\" value=\"{$row['refid']}\"> </h4>";
+
+    }
+                if(isset($_POST['forwardtoken'])){
+                    
+                    $sql = "UPDATE tokens set active='4' where refid='{$_POST['forwardtoken']}'";
+                     $result = $conn->query($sql);
+                    echo "Patient Token Forwarded!!<br>";
+                }
+                
+    ?><input class="btn-info" type="submit" name="call_token" value="Forward">
+            </form>    
+        </div> 
+    <div class="col-sm-4">
         
         <form class ="form-horizontal" action="doctor.php" method="post">
     
@@ -89,6 +157,7 @@ include('dbcon.php');
     : (date("Y") - $birthDate[0]));
                 
                echo  "
+               <h4>Token No. {$token}</h4>
     <tbody>
     
     <th>{$row['plname']}</th>
@@ -129,13 +198,17 @@ $conn->close();
         */
         ?>
   </table>
+          
         
         
         </div>
         
         
         
-    <div class="col-sm-6">
+    <div class="col-sm-5">
+        
+        
+        
         
     <form <?php if(!isset($_POST['token'])){echo 'style="display:none"';} ?> class="form-horizontal" action="docprescription.php" method="post">  
       <input type="hidden" name="pnid" value="<?php echo $pnid; ?>">
@@ -171,10 +244,10 @@ $sql = "SELECT * FROM medicines";
 
 $result = $conn->query($sql);
 
-while($row = $result->fetch_assoc()){
+while($row2 = $result->fetch_assoc()){
     
      echo " 
-        <option>{$row['medicine']}</option>
+        <option>{$row2['medicine']}</option>
       ";
 }
    
@@ -202,6 +275,9 @@ while($row = $result->fetch_assoc()){
   <textarea name="tnotes" class="form-control" rows="4" id="comment"></textarea>
           
 </div>
+        
+     
+        
       
 <!--
     <div class="form-group">
@@ -229,9 +305,50 @@ while($row = $result->fetch_assoc()){
       </div>
     </div>
   </form>
+        
+         
+        
         </div>
         </div>
+    
+    
+    <div class="row">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-1"></div>
+        <div class="col-sm-4">
+            <div class="form-group" style="<?php if(!isset($_POST['submittoken']))echo "display:none";?>"> 
+                <label for="select1">Select Lab Tests : </label>
+      <form id="select1" action="doc_lab_update.php" method="post">
+        <select class="form-control" name="tests[]" multiple>
+            <option disabled>Select Labtests</option>
+        <?php
+        if(isset($_POST['submittoken'])){
+            
+        // fetch tests
+            $sql_for_tests = "SELECT * from labtests";
+            $result = $conn->query($sql_for_tests);
+            while($row3 = $result->fetch_assoc()){
+                
+                echo "<option value=\"{$row3['testid']}\"> {$row3['test']}</option>";
+                
+            }
+        }
+        ?>
+            </select>
+               <input type="hidden" name="token" value="<?php  echo $_POST['token'];?>">
+                <input type="hidden" name="height" value="<?php echo $row['height']; ?>">
+                <input type="hidden" name="weight" value="<?php echo $row['weight'];?>">
+                <input type="hidden" name="bp" value="<?php echo $row['bp']; ?>">
+                <input type="hidden" name="pnid" value="<?php echo $row['pnid'];?>">
+              <input class="btn-warning"type="submit" value="send for labtest" name="sendlabtest">
+            </form>
+            </div>
+            </div>
+    </div>
+    
+    
 </div>
 
+  
 </body>
 </html>

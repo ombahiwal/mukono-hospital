@@ -9,7 +9,7 @@ if(isset($_POST['submit'])){
     $sql = "INSERT INTO tokens (pnid, docid, comments, token, active) VALUES ('{$pnid}', '{$docid}', '{$comment}', '0','1')";
 
 if ($conn->query($sql) === TRUE) {
-    $sql = "select * from tokens where pnid = '{$pnid}'";
+    $sql = "select * from tokens where pnid = '{$pnid}' and active = '1q'";
 
     $result = $conn->query($sql);
 
@@ -22,7 +22,9 @@ if ($conn->query($sql) === TRUE) {
         echo "Some error Occured, Please contact IT!";
             }
     
-    echo "Appointment registered!<br>New Token Generated - ".$refid;
+    echo "<center>Appointment registered!<br>New Token Generated - <h1>".$refid."</h1><br><br> <a href = \"appointment.php\">Create Another Appointment</a></center>";
+    
+    
 } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
 }
@@ -30,10 +32,4 @@ if ($conn->query($sql) === TRUE) {
 $conn->close();
     
 }
-
-
-
-
-
-
 ?>

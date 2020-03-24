@@ -12,8 +12,8 @@
     <style>
     
         .col-sm-2{
-            color:dimgray;   
-            background: lightyellow;
+            color:lightyellow;   
+/*            background: lightyellow;*/
             border-radius: 20px;
         }
         .container-fluid{
@@ -26,8 +26,7 @@
             background:dimgray;
         }
         .active{
-            color
-            background: green;
+          background: green;
         }
         h3{
             color:green;
@@ -44,28 +43,18 @@
         <div class="col-sm-1"></div>
         
         <div class="col-sm-2 active">
-            <center>
-    <h2>Waiting</h2>
-<?php
-    
-    include('dbcon.php');
-    // Add upper and lower limit for the time stamp and expired tokens..
-    
-    $sql = "SELECT * from tokens where active ='1'";
-    
-    $result = $conn->query($sql);
-    while($row = $result->fetch_assoc()){
-        echo "<h3>".$row['refid']."</h3><br>";
-    }
-    
-    ?>
-                </center>
+            
     </div>
     
         <div class="col-sm-2">
-        <center><h2>Screening</h2>
-          <?php  
-    $sql = "SELECT * from tokens where active ='2'";
+       
+        </div>
+        
+        <div class="col-sm-2">
+        <center><h2>Pathology Laboratory</h2>
+          <?php
+            include('dbcon.php');
+    $sql = "SELECT * from tokens where active ='5'";
     
     $result = $conn->query($sql);
     while($row = $result->fetch_assoc()){
@@ -79,46 +68,12 @@
         </div>
         
         <div class="col-sm-2">
-        <center><h2>Doctor</h2>
-          <?php  
-    $sql = "SELECT * from tokens where active ='3'";
-    
-    $result = $conn->query($sql);
-    while($row = $result->fetch_assoc()){
-        
-        echo "<h3>".$row['refid']."</h3><br>";
-    
-        
-    }
-    
-    ?></center>
-        </div>
-        
-        <div class="col-sm-2">
-            <center>
-            <h2>Pharmacy</h2>
-        <?php
-          $sql = "SELECT * from tokens where active ='4'";    
-    $result = $conn->query($sql);
-    while($row = $result->fetch_assoc()){
-        echo "<h3>".$row['refid']."</h3><br>";
-    }
-            ?>
-                </center>
+            
         </div>
       
         
         <div class="col-sm-2">
-            <center>
-            <h2>Expired Tokens</h2>
-        <?php
-          $sql = "SELECT * from tokens where active ='0'";    
-    $result = $conn->query($sql);
-    while($row = $result->fetch_assoc()){
-        echo "<h3>".$row['refid']."</h3><br>";
-    }
-            ?>
-                </center>
+            
         </div>
         
     </div>

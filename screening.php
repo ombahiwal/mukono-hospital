@@ -19,7 +19,54 @@ include('dbcon.php');
   <center><h2>- Patient Screening -</h2></center>
  <br><br>
     <div class="row">
-    <div class="col-sm-6">
+        
+        <div class="col-sm-1">
+            <form action="" method="post">
+<h4>Waiting Tokens</h4>
+            <?php
+         $sql = "SELECT * from tokens where active ='1'";
+    
+    $result = $conn->query($sql);
+    while($row = $result->fetch_assoc()){
+        echo "<h4>".$row['refid']."<input type=\"radio\" name=\"screentoken\" value=\"{$row['refid']}\"> </h4>";
+
+    }
+                if(isset($_POST['screentoken'])){
+                    
+                    $sql = "UPDATE tokens set active='2' where refid='{$_POST['screentoken']}'";
+                     $result = $conn->query($sql);
+                    echo "Patient Token Updated !!<br>";
+                }
+                
+    ?><input class="btn-info" type="submit" name="call_token" value="Call">
+            </form>
+        
+            
+        </div>
+        
+         <div class="col-sm-1">
+            <form action="" method="post">
+<h4>Screening Tokens</h4>
+            <?php
+         $sql = "SELECT * from tokens where active ='2'";
+    
+    $result = $conn->query($sql);
+    while($row = $result->fetch_assoc()){
+        echo "<h4>".$row['refid']."<input type=\"radio\" name=\"forwardtoken\" value=\"{$row['refid']}\"> </h4>";
+
+    }
+                if(isset($_POST['forwardtoken'])){
+                    
+                    $sql = "UPDATE tokens set active='3' where refid='{$_POST['forwardtoken']}'";
+                     $result = $conn->query($sql);
+                    echo "Patient Token Forwarded !!<br>";
+                }
+                
+    ?><input class="btn-info" type="submit" name="forward_token" value="Forward">
+            </form>
+        </div>
+        
+    <div class="col-sm-4">
         
         <form class ="form-horizontal" action="screening.php" method="post">
     
